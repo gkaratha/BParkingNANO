@@ -1,4 +1,5 @@
 #include "CommonTools/MVAUtils/interface/GBRForestTools.h"
+#include "DataFormats/Common/interface/RefToPtr.h"
 #include "DataFormats/EgammaCandidates/interface/GsfElectron.h"
 #include "DataFormats/EgammaReco/interface/SuperCluster.h"
 #include "DataFormats/EgammaReco/interface/SuperClusterFwd.h"
@@ -44,11 +45,17 @@ namespace lowptgsfeleid {
   
   ////////////////////////////////////////////////////////////////////////////////
   //
-  void Features::set( const reco::GsfElectronRef& ele, double rho ) {
+  void Features::set( const reco::LowPtGsfElectronRef& ele, double rho ) {
+    set(edm::refToPtr(ele),rho);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //
+  void Features::set( const reco::GsfElectronPtr& ele, double rho ) {
 
     // KF tracks
     if ( ele->core().isNonnull() ) {
-      reco::TrackRef trk = ele->core()->ctfTrack(); //@@ is this what we want?!
+      reco::TrackRef trk = ele->closestCtfTrackRef();
       if ( trk.isNonnull() ) {
 	trk_p_ = float(trk->p());
 	trk_nhits_ = float(trk->found());
@@ -136,7 +143,16 @@ namespace lowptgsfeleid {
   ////////////////////////////////////////////////////////////////////////////////
   //
   double HeavyObjectCache::eval( const std::string& name,
-				 const reco::GsfElectronRef& ele,
+				 const reco::LowPtGsfElectronRef& ele,
+				 double rho ) const
+  {
+    return eval(name,edm::refToPtr(ele),rho);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //
+  double HeavyObjectCache::eval( const std::string& name,
+				 const reco::GsfElectronPtr& ele,
 				 double rho ) const
   {
     std::vector<std::string>::const_iterator iter = std::find( names_.begin(), 

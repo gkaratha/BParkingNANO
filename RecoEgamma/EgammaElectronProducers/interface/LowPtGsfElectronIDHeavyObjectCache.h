@@ -9,6 +9,8 @@
 namespace reco { 
   class BeamSpot;
   class PreId; 
+  typedef edm::Ptr<GsfElectron> GsfElectronPtr;
+  typedef edm::Ref< edm::View<GsfElectron> > LowPtGsfElectronRef;
 }
 
 namespace lowptgsfeleid {
@@ -45,7 +47,8 @@ namespace lowptgsfeleid {
     float ele_pt_ = -1.;
   public:
     std::vector<float> get();
-    void set( const reco::GsfElectronRef& ele, double rho );
+    void set( const reco::LowPtGsfElectronRef& ele, double rho );
+    void set( const reco::GsfElectronPtr& ele, double rho );
   };
   
   class HeavyObjectCache {
@@ -56,7 +59,8 @@ namespace lowptgsfeleid {
 
     std::vector<std::string> modelNames() const { return names_; }
 
-    double eval( const std::string& name, const reco::GsfElectronRef&, double rho ) const;
+    double eval( const std::string& name, const reco::LowPtGsfElectronRef&, double rho ) const;
+    double eval( const std::string& name, const reco::GsfElectronPtr&, double rho ) const;
     
   private:
 
