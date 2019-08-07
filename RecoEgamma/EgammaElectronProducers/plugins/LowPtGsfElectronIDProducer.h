@@ -1,6 +1,7 @@
 #ifndef RecoEgamma_EgammaElectronProducers_LowPtGsfElectronIDProducer_h
 #define RecoEgamma_EgammaElectronProducers_LowPtGsfElectronIDProducer_h
 
+#include "DataFormats/Common/interface/View.h"
 #include "DataFormats/EgammaCandidates/interface/GsfElectronFwd.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/stream/EDProducer.h"
@@ -32,7 +33,7 @@ public edm::stream::EDProducer< edm::GlobalCache<lowptgsfeleid::HeavyObjectCache
 
  private:
   
-  const edm::EDGetTokenT<reco::GsfElectronCollection> gsfElectrons_;
+  const edm::EDGetTokenT< edm::View<reco::GsfElectron> > gsfElectrons_;
   const edm::EDGetTokenT<double> rho_;
   const std::vector<std::string> names_;
   const bool passThrough_;
